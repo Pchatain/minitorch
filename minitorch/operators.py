@@ -20,66 +20,125 @@ def mul(x, y):
 
     Returns:
         float : product of x and y
+        :math:`f(x, y) = x * y`
     """
     return x * y
 
 
 def id(x):
-    ":math:`f(x) = x`"
-    # TODO: Implement for Task 0.1.
+    """
+    Identity function.
+
+    Args:
+        x (float): the input value
+
+    Returns:
+        float: the input values
+        :math:`f(x) = x`
+    """
     return x
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def add(x, y):
-    ":math:`f(x, y) = x + y`"
-    # TODO: Implement for Task 0.1.
+    """
+    Adds two numbers
+
+    Args:
+        x (float): The first number
+        y (float): The second number
+
+    Returns:
+        The sum of both numbers
+        :math:`f(x, y) = x + y`
+    """
     return x + y
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def neg(x):
-    ":math:`f(x) = -x`"
-    # TODO: Implement for Task 0.1.
+    """
+    Takes the negation of a number, otherwise known as the additive inverse of a number.
+
+    Args:
+        x (float): The number to negate
+
+    Returns:
+        The additive inverse of x
+        :math:`f(x) = -x`
+    """
     return -x
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def lt(x, y):
-    ":math:`f(x) =` 1.0 if x is less than y else 0.0"
-    # TODO: Implement for Task 0.1.
+    """
+    Indicates whether the first number is less than the second number.
+
+    Args:
+        x (float): The first number
+        y (float): The second number
+
+    Returns:
+        float : 1.0 if the first number is strictly smaller, and 0.0 otherwise
+        :math:`f(x) =` 1.0 if x is less than y else 0.0
+
+    """
     if x < y:
         return 1.0
     else:
         return 0.0
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def eq(x, y):
-    ":math:`f(x) =` 1.0 if x is equal to y else 0.0"
-    # TODO: Implement for Task 0.1.
+    """
+    Indicates whether two numbers are equal.
+
+    Args:
+        x (float): The first number
+        y (float): The second number
+
+    Returns:
+        float : 1.0 if the numbers are equal, and 0.0 otherwise
+        :math:`f(x) =` 1.0 if x is equal to y else 0.0
+
+    """
     if x == y:
         return 1.0
     else:
         return 0.0
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def max(x, y):
-    ":math:`f(x) = x` if x is greater than y else y"
-    # TODO: Implement for Task 0.1.
+    """
+    Returns the maximum of two numbers.
+
+    Args:
+        x (float): The first number
+        y (float): The second number
+
+    Returns:
+        float : The maximum of x and y
+        :math:`f(x) = x` if x is greater than y else y
+
+    """
     if x > y:
         return x
     else:
         return y
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def is_close(x, y):
-    ":math:`f(x) = |x - y| < 1e-2`"
-    # TODO: Implement for Task 0.1.
+    """
+    Indicates whether two numbers are close enough to be considered equal.
+
+    Args:
+        x (float): The first number
+        y (float): The second number
+
+    Returns:
+        bool : True if the numbers are close enough to be considered equal, False otherwise
+        :math:`f(x) = |x - y| < 1e-2`
+
+    """
     return abs(x - y) < 1e-2
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def sigmoid(x):
@@ -100,9 +159,7 @@ def sigmoid(x):
     Returns:
         float : sigmoid value
     """
-    # TODO: Implement for Task 0.1.
     return 1.0 / (1.0 + math.exp(-x))
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def relu(x):
@@ -117,12 +174,10 @@ def relu(x):
     Returns:
         float : relu value
     """
-    # TODO: Implement for Task 0.1.
     if x > 0:
         return x
     else:
         return 0
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 EPS = 1e-6
@@ -167,7 +222,6 @@ def relu_back(x, d):
         return d
     else:
         return 0
-    raise NotImplementedError("Need to implement for Task 0.1")
 
 
 # ## Task 0.3
