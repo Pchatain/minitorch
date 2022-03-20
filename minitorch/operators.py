@@ -245,14 +245,19 @@ def map(fn):
         function : A function that takes a list, applies `fn` to each element, and returns a
         new list
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+
+    def map_list(l):
+        result = []
+        for x in l:
+            result.append(fn(x))
+        return result
+
+    return map_list
 
 
 def negList(ls):
     "Use :func:`map` and :func:`neg` to negate each element in `ls`"
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    return map(neg)(ls)
 
 
 def zipWith(fn):
@@ -271,14 +276,17 @@ def zipWith(fn):
         applying fn(x, y) on each pair of elements.
 
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+
+    def map2(ls1, ls2):
+        zipped = zip(ls1, ls2)
+        return [fn(*x) for x in zipped]
+
+    return map2
 
 
 def addLists(ls1, ls2):
     "Add the elements of `ls1` and `ls2` using :func:`zipWith` and :func:`add`"
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    return zipWith(add)(ls1, ls2)
 
 
 def reduce(fn, start):
@@ -297,17 +305,34 @@ def reduce(fn, start):
         :math:`x_1 \ldots x_n` and computes the reduction :math:`fn(x_3, fn(x_2,
         fn(x_1, x_0)))`
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+
+    def reduce_list(ls):
+        curr = start
+        for elem in ls:
+            curr = fn(elem, curr)
+        return curr
+
+    return reduce_list
 
 
 def sum(ls):
     "Sum up a list using :func:`reduce` and :func:`add`."
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    "Reduce takes in a list of functions, and one starting element"
+    "Problem is that we have a list of elements and only one function"
+    "SO, maybe we can turn every element in this list into a function"
+    if len(ls) == 0:
+        return 0
+    elif len(ls) == 1:
+        return ls[0]
+    else:
+        return reduce(add, ls[0])(ls[1:])
 
 
 def prod(ls):
     "Product of a list using :func:`reduce` and :func:`mul`."
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    if len(ls) == 0:
+        return 0
+    elif len(ls) == 1:
+        return ls[0]
+    else:
+        return reduce(mul, ls[0])(ls[1:])
