@@ -37,3 +37,9 @@ Topics covered:
 * Advanced NN Functions
 
 
+Module 0 image
+<figure>
+    <img src="https://github.com/Pchatain/minitorch/blob/main/Images/Hand_selected_classifier.png" width="250" height="250">
+</figure>
+
+
