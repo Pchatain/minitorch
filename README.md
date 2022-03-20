@@ -37,7 +37,11 @@ Topics covered:
 * Advanced NN Functions
 
 
-Module 0 image
+Module 0 task 5 solution parameters:
+* Parametere 0_0 = -10.0
+* Parameter 1_0  = -0.02
+* Bias 1_0       = 4.98
+
 <figure>
     <img src="https://github.com/Pchatain/minitorch/blob/main/Images/Hand_selected_classifier.png" width="250" height="250">
 </figure>
