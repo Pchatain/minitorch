@@ -45,8 +45,7 @@ class Module:
 
         for module_name, module in self.__dict__["_modules"].items():
             child_params = module.named_parameters()
-            if child_params is None:
-                continue  # not convinced this is necessary, but it can't hurt
+
             for name, param in child_params:
                 new_name = module_name + "." + name
                 all_prarms.append((new_name, param))
@@ -54,9 +53,7 @@ class Module:
 
     def parameters(self):
         "Enumerate over all the parameters of this module and its descendents."
-        # for name, param in self.named_parameters():
-        #     yield param
-        return self.named_parameters()
+        return [param for (_, param) in self.named_parameters()]
 
     def add_parameter(self, k, v):
         """
