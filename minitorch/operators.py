@@ -184,40 +184,77 @@ EPS = 1e-6
 
 
 def log(x):
-    ":math:`f(x) = log(x)`"
+    r"""
+    :math:`f(x) = log(x)`
+
+    Args:
+        x (float): input
+
+    Returns:
+        float : log value
+    """
     return math.log(x + EPS)
 
 
 def exp(x):
-    ":math:`f(x) = e^{x}`"
+    r"""
+    :math:`f(x) = e^x`
+
+    Args:
+        x (float): input
+
+    Returns:
+        float : exp value
+    """
     return math.exp(x)
 
 
 def log_back(x, d):
-    r"If :math:`f = log` as above, compute :math:`d \times f'(x)`"
-    # TODO: Implement for Task 0.1.
+    r"""
+    Calculate the derivative of f(x) and multiply by d.
+
+    :math:`d \times log'(x)`
+
+    """
     return d / x
-    # raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def inv(x):
-    ":math:`f(x) = 1/x`"
-    # TODO: Implement for Task 0.1.
+    r""":math:`f(x) = 1/x`
+
+    Args:
+        x (float): input
+
+    Returns:
+        float : inverse value
+    """
     return 1.0 / x
-    raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def inv_back(x, d):
-    r"If :math:`f(x) = 1/x` compute :math:`d \times f'(x)`"
-    # TODO: Implement for Task 0.1.
-    # f primed is -x^-2
+    r"""If :math:`f(x) = 1/x` compute :math:`d \times f'(x)`
+
+    Args:
+        x (float): input
+        d (float): constant multiplier
+
+    Returns:
+        float : derivative of d/x
+    """
     return -d * x**-2
-    raise NotImplementedError("Need to implement for Task 0.1")
 
 
 def relu_back(x, d):
-    r"If :math:`f = relu` compute :math:`d \times f'(x)`"
-    # TODO: Implement for Task 0.1.
+    r"""
+    If :math:`f = relu` compute :math:`d \times f'(x)`
+
+    Args:
+        x (float): input
+        d (float): constant multiplier
+
+    Returns:
+        float : derivative of d/x
+    """
     if x > 0:
         return d
     else:
@@ -245,18 +282,17 @@ def map(fn):
         function : A function that takes a list, applies `fn` to each element, and returns a
         new list
     """
-
-    def map_list(l):
-        result = []
-        for x in l:
-            result.append(fn(x))
-        return result
-
-    return map_list
+    return lambda ls: [fn(x) for x in ls]
 
 
 def negList(ls):
-    "Use :func:`map` and :func:`neg` to negate each element in `ls`"
+    r"""Use :func:`map` and :func:`neg` to negate each element in `ls`
+    Args:
+        ls (list): list of numbers
+
+    Returns:
+        list : list of numbers with each element negated
+    """
     return map(neg)(ls)
 
 
@@ -285,7 +321,15 @@ def zipWith(fn):
 
 
 def addLists(ls1, ls2):
-    "Add the elements of `ls1` and `ls2` using :func:`zipWith` and :func:`add`"
+    r"""Add the elements of `ls1` and `ls2` using :func:`zipWith` and :func:`add`
+
+    Args:
+        ls1 (list): first list
+        ls2 (list): second list
+
+    Returns:
+        list : the sum of the two lists
+    """
     return zipWith(add)(ls1, ls2)
 
 
@@ -316,23 +360,23 @@ def reduce(fn, start):
 
 
 def sum(ls):
-    "Sum up a list using :func:`reduce` and :func:`add`."
-    "Reduce takes in a list of functions, and one starting element"
-    "Problem is that we have a list of elements and only one function"
-    "SO, maybe we can turn every element in this list into a function"
-    if len(ls) == 0:
-        return 0
-    elif len(ls) == 1:
-        return ls[0]
-    else:
-        return reduce(add, ls[0])(ls[1:])
+    r"""Sum up a list using :func:`reduce` and :func:`add`.
+
+    Args:
+        ls (list): list of numbers
+
+    Returns:
+        float : sum of the list
+    """
+    return reduce(add, 0)(ls)
 
 
 def prod(ls):
-    "Product of a list using :func:`reduce` and :func:`mul`."
-    if len(ls) == 0:
-        return 0
-    elif len(ls) == 1:
-        return ls[0]
-    else:
-        return reduce(mul, ls[0])(ls[1:])
+    r"""Product of a list using :func:`reduce` and :func:`mul`.
+    Args:
+        ls (list): list of numbers
+
+    Returns:
+        float : product of all elements in the list
+    """
+    return reduce(mul, 1)(ls)

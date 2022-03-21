@@ -175,12 +175,6 @@ def test_sum_distribute(ls1, ls2):
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
     assert_close(sum(ls1) + sum(ls2), sum(addLists(ls1, ls2)))
-    # answer = []
-    # for i in range(len(ls1)):
-    #     answer.append(ls1[i] + ls2[i])
-    # function_answer = sum(ls1, ls2)
-    # for i in range(len(ls1)):
-    #     assert_close(function_answer[i], answer[i])
 
 
 @pytest.mark.task0_3
