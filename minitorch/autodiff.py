@@ -190,8 +190,24 @@ class History:
         Returns:
             list of numbers : a derivative with respect to `inputs`
         """
-        # TODO: Implement for Task 1.4.
-        raise NotImplementedError("Need to implement for Task 1.4")
+        if self is None:
+            return []
+        var_and_derivs = self.last_fn.chain_rule(self.ctx, self.inputs, d_output)
+        derivatives = []
+        for var, deriv in var_and_derivs:
+            derivatives.append(deriv)
+        return derivatives
+
+        # derivatives = []
+        # grads = self.chain_rule(self.cls, self.ctx, self.inputs, d_output)
+        # for grad in grads:
+        #     var, deriv = grad
+        #     derivatives.append(deriv)
+
+        # # for input in self.inputs:
+        # #     print(f"derivative with respect to {input.name} is {input.derivative}")
+        # #     derivatives.append(d_output * input.derivative)
+        # return derivatives
 
 
 class FunctionBase:
@@ -273,8 +289,20 @@ class FunctionBase:
         """
         # Tip: Note when implementing this function that
         # cls.backward may return either a value or a tuple.
-        # TODO: Implement for Task 1.3.
-        raise NotImplementedError("Need to implement for Task 1.3")
+        # this should be good
+        derivatives = cls.backward(ctx, d_output)
+        if not isinstance(derivatives, list) and not isinstance(derivatives, tuple):
+            derivatives = [derivatives]
+            # needed for when derivatives returns just a number
+
+        output = []
+        for i, input in enumerate(inputs):
+            if isinstance(input, Variable):
+                if is_constant(input):
+                    continue
+                name = input.name
+                output.append((Variable(None, name=name), derivatives[i]))
+        return output
 
 
 # Algorithms for backpropagation
@@ -295,8 +323,43 @@ def topological_sort(variable):
         list of Variables : Non-constant Variables in topological order
                             starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+
+    def visit(node, nodeQueue, finishedNodes, L):
+        try:
+            tetst = node.name
+        except:
+            # print(f"Node is not correct type, has type {type(node)} and value {node}")
+            return
+        if node.unique_id in finishedNodes:
+            return
+        if node.unique_id in nodeQueue:
+            print("Cycle detected")
+            return ValueError("not a DAG, uh oh.")
+        nodeQueue[node.unique_id] = node
+        if node.history is not None:
+            previous_variables = node.history.inputs
+            # print(f"Previous variables are {previous_variables} from variable {node}")
+            if previous_variables is not None:
+                for previous_variable in previous_variables:
+                    visit(previous_variable, nodeQueue, finishedNodes, L)
+
+        nodeQueue.pop(node.unique_id)
+        finishedNodes[node.unique_id] = node
+        L.insert(0, node)
+
+    L = []
+    nodeQueue = {}  # variable.unique_id: (variable, None)
+    finishedNodes = {}
+    node = variable
+    while nodeQueue is not None:
+        visit(node, nodeQueue, finishedNodes, L)
+        if len(nodeQueue) == 0:
+            nodeQueue = None
+    # print("---------found-L--------")
+    # for i in L:
+    #     print(i.unique_id)
+    # print("----------------------")
+    return L
 
 
 def backpropagate(variable, deriv):
@@ -312,5 +375,76 @@ def backpropagate(variable, deriv):
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    # step 0 get ordered queue
+    # print(f"We initialize the funcitoin at {variable.name}")
+    top_sort = topological_sort(variable)
+
+    # step 1 create dict of variables and curr derivatives
+    curr_derivatives = {v.unique_id: 0.0 for v in top_sort}
+    curr_derivatives[variable.unique_id] = deriv
+    # step 2, for each node in backward order pull var and eriv from queue
+    for var in top_sort:
+        # a. if the variabel is a leaf, accumulate deriv and loop to (1)
+        # print(f"We are processing {var.name}")
+        if var.history is None:
+            # var.accumulate_derivative(curr_derivatives[var.unique_id])
+            continue
+        # print(f"The past functitons are {var.history.last_fn}")
+        if var.is_leaf():
+            # print(f"We identified leaf {var.name}")
+            var.accumulate_derivative(curr_derivatives[var.unique_id])
+            continue
+            # accumulate_derivative(var, curr_derivatives[var.unique_id])
+        # b. if var is not a leaf
+        # 1. call .backprop_step on the last function that created it wtih derivative as d_out
+        derivatives = var.history.backprop_step(curr_derivatives[var.unique_id])
+        index = 0
+        if not isinstance(derivatives, list):
+            derivatives = [derivatives]
+        # print(
+        #     f"We have len(var.history.inputs) = {len(var.history.inputs)}, and derivatives = {derivatives}"
+        # )
+        for i in range(len(var.history.inputs)):
+            input = var.history.inputs[i]
+            if isinstance(input, Variable):
+                if is_constant(input):
+                    continue  # because in chain_rule we skip over constants (deriv=0)
+                # print(f"i is {i} and index is {index}")
+                curr_derivatives[input.unique_id] += derivatives[index]
+                # print(f", and derivatives is {derivatives[index]}")
+                index += 1
+        # print("----------------")
+        # 2. loop through all the variables + derivatives produced by the chain rule
+        # 3. accumulate the derivatives for the variable in a dictionary (check .unique_id)
+
+    #     if is_constant(var):
+    #         continue
+    #     var.backprop_step(deriv)
+    # variable.derivative = deriv
+
+
+"""
+I am stuck becasue I can't get it to work even in the most basic case. 
+I don't understand how to pass the derivatiives. It doesn't make sesne, because once you process the derivative
+for one variable, you should be passing it along to the variables that depend on it,
+but so far it's just processing everything in place and the variables are not communicating in any way.
+
+I guess there should be access to the 
+"""
+
+"""
+So i figured it out, derivatives have to add and they ahve to come from the nodes before.
+I figured this problem out by writing down on paper what the functions do, writing down 
+exactly why the code made no sense, and then actually trying to figure
+out how this could in principle work. From there, I was able to narrow down to only like
+2 possible ways to implement the code, and was able to select from there. I debugged by
+printing output, and paying attention to error codes. CUrrent errors:
+
+relu is ggiving int error. int not subscriptible.
+divconstant, exp, subconstant = list index out of range -- Fixed these bugs
+
+inv, add, cube, log, multconstant, neg, sig, square,  = good
+
+complex = overflow error
+
+"""

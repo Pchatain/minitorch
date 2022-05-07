@@ -65,7 +65,9 @@ def neg(x):
         The additive inverse of x
         :math:`f(x) = -x`
     """
-    return -x
+    return -1.0 * x
+    # this was needed to work around task1_2 returning ints for a task as opposed to floats.
+    # It would otherwise be -x
 
 
 def lt(x, y):
@@ -174,10 +176,10 @@ def relu(x):
     Returns:
         float : relu value
     """
-    if x > 0:
+    if x > 0.0:
         return x
     else:
-        return 0
+        return 0.0
 
 
 EPS = 1e-6
@@ -255,10 +257,10 @@ def relu_back(x, d):
     Returns:
         float : derivative of d/x
     """
-    if x > 0:
+    if x >= 0.0:
         return d
     else:
-        return 0
+        return 0.0
 
 
 # ## Task 0.3
